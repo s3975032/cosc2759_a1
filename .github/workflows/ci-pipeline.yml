@@ -66,8 +66,13 @@ jobs:
         working-directory: ./src
         run: npm ci
 
-      - name: Set up MongoDB
-        run: sudo service mongod start
+      - name: Install MongoDB
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mongodb
+
+      - name: Start MongoDB
+        run: sudo service mongodb start
 
       - name: Run integration tests with coverage
         working-directory: ./src
