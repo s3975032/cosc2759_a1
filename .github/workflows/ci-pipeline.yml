@@ -26,7 +26,7 @@ jobs:
 
       - name: Run linter
         working-directory: ./src
-        run: npm run lint
+        run: npm run test-lint
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
 
       - name: Run unit tests with coverage
         working-directory: ./src
-        run: npm run test:unit -- --coverage
+        run: npm run test-unit -- --coverage
 
       - name: Upload unit test coverage
         uses: actions/upload-artifact@v3
@@ -71,7 +71,7 @@ jobs:
 
   #     - name: Run integration tests with coverage
   #       working-directory: ./src
-  #       run: npm run test:integration -- --coverage
+  #       run: npm run test-integration -- --coverage
 
   #     - name: Upload integration test coverage
   #       uses: actions/upload-artifact@v3
@@ -101,39 +101,39 @@ jobs:
 
   #     - name: Run e2e tests
   #       working-directory: ./src
-  #       run: npm run test:e2e
+  #       run: npm run test-e2e
 
   #     - name: Upload e2e test results
   #       uses: actions/upload-artifact@v3
   #       with:
   #         name: e2e-test-results
   #         path: ./src/playwright-report/
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Use Node.js 17.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: "17"
+  #     - name: Use Node.js 17.x
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: "17"
 
-      - name: Install dependencies
-        working-directory: ./src
-        run: npm ci
+  #     - name: Install dependencies
+  #       working-directory: ./src
+  #       run: npm ci
 
-      - name: Build the application
-        working-directory: ./src
-        run: npm run build
+  #     - name: Build the application
+  #       working-directory: ./src
+  #       run: npm run build
 
-      - name: Package application
-        run: |
-          mkdir -p deploy
-          cd src
-          zip -r ../deploy/NOTE-APP-1.1.0.zip . -x ".github/*"
+  #     - name: Package application
+  #       run: |
+  #         mkdir -p deploy
+  #         cd src
+  #         zip -r ../deploy/NOTE-APP-1.1.0.zip . -x ".github/*"
 
-      - name: Upload deployable artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: deployable-application
-          path: deploy/NOTE-APP-1.1.0.zip
+  #     - name: Upload deployable artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: deployable-application
+  #         path: deploy/NOTE-APP-1.1.0.zip
