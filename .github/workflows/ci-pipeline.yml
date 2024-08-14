@@ -66,11 +66,16 @@ jobs:
   #       working-directory: ./src
   #       run: npm ci
 
-  #     - name: Set up MongoDB
+  #     - name: Install MongoDB
+  #       run: sudo apt install -y mongodb-org
+
+  #     - name: Start MongoDB
   #       run: sudo service mongod start
 
   #     - name: Run integration tests with coverage
   #       working-directory: ./src
+  #       env:
+  #         MONGODB_URI: mongodb://localhost:27017
   #       run: npm run test-integration -- --coverage
 
   #     - name: Upload integration test coverage
@@ -84,6 +89,31 @@ jobs:
   #       with:
   #         name: integration-test-results
   #         path: ./src/junit.xml
+
+  artifact:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [lint, unit-tests]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+
+      - name: Install dependencies
+        working-directory: ./src
+        run: npm ci
+
+      - name: Archive source code
+        run: zip -czf NOTES-APP-1.1.0.zip src
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: NOTES-APP-1.1.0
+          path: NOTES-APP-1.1.0.zip
 
   # e2e-tests:
   #   runs-on: ubuntu-latest
