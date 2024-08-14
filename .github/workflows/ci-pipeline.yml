@@ -108,7 +108,7 @@ jobs:
         run: ls -la
 
       - name: Archive source code
-        run: zip -r notes-app-1.1.0.zip notes-app-1.1.0
+        run: zip -r notes-app-1.1.0.zip src
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
