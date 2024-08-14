@@ -2,3 +2,128 @@ name: Notes Application CI Pipeline
 # create a CI pipeline based on the assignment specification
 # remember to commit often
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Run linter
+        run: npm run lint
+
+  unit-tests:
+    unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Run unit tests
+        run: npm run test:unit -- --coverage
+
+      - name: Upload unit test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-test-coverage
+          path: coverage/
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Set up MongoDB
+        run: sudo service mongod start
+
+      - name: Run integration tests
+        run: npm run test:integration -- --coverage
+
+      - name: Upload integration test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-coverage
+          path: coverage/
+
+      - name: Upload integration test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-results
+          path: junit.xml
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+
+      - name: Upload e2e test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-test-results
+          path: playwright-report/
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Build the application
+        run: npm run build
+
+      - name: Package application
+        run: |
+          mkdir -p deploy
+          zip -r deploy/NOTE-APP-1.1.0.zip src/ .github/ img/ package.json
+
+      - name: Upload deployable artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployable-application
+          path: deploy/NOTE-APP-1.1.0.zip
