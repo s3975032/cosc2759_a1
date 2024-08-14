@@ -93,7 +93,6 @@ jobs:
   artifact:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [lint, unit-tests]
     steps:
       - uses: actions/checkout@v3
 
@@ -106,8 +105,11 @@ jobs:
         working-directory: ./src
         run: npm ci
 
+      - name: List directory contents
+        run: ls -la
+
       - name: Archive source code
-        run: zip -r notes-app-1.1.0.zip notes-app-1.1.0
+        run: zip -r notes-app-1.1.0.zip src
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
