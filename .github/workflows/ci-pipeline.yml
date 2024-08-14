@@ -21,7 +21,7 @@ jobs:
           node-version: "17"
 
       - name: Install dependencies
-        run: npm clean-install
+        run: npm ci
 
       - name: Run linter
         run: npm run lint
@@ -37,7 +37,7 @@ jobs:
           node-version: "17"
 
       - name: Install dependencies
-        run: npm clean-install
+        run: npm ci
 
       - name: Run unit tests
         run: npm run test:unit -- --coverage
@@ -59,7 +59,7 @@ jobs:
   #         node-version: "17"
 
   #     - name: Install dependencies
-  #       run: npm clean-install
+  #       run: npm ci
 
   #     - name: Set up MongoDB
   #       run: sudo service mongod start
@@ -90,7 +90,7 @@ jobs:
   #         node-version: "17"
 
   #     - name: Install dependencies
-  #       run: npm clean-install
+  #       run: npm ci
 
   #     - name: Run e2e tests
   #       run: npm run test:e2e
@@ -111,7 +111,7 @@ jobs:
           node-version: "17"
 
       - name: Install dependencies
-        run: npm clean-install
+        run: npm ci
 
       - name: Build the application
         run: npm run build
