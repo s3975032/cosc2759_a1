@@ -66,6 +66,9 @@ jobs:
         working-directory: ./src
         run: npm ci
 
+      - name: Start MongoDB
+        run: sudo service mongod start
+
       - name: Run integration tests with coverage
         working-directory: ./src
         env:
