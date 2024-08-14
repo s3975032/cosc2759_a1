@@ -107,13 +107,13 @@ jobs:
         run: npm ci
 
       - name: Archive source code
-        run: zip -czf NOTES-APP-1.1.0.zip src
+        run: zip -r notes-app-1.1.0.zip notes-app-1.1.0
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: NOTES-APP-1.1.0
-          path: NOTES-APP-1.1.0.zip
+          name: notes-app-1.1.0
+          path: notes-app-1.1.0.zip
 
   # e2e-tests:
   #   runs-on: ubuntu-latest
