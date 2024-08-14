@@ -64,12 +64,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./src
-        env:
-          MONGODB_URI: mongodb://localhost:27017
         run: npm ci
 
       - name: Run integration tests with coverage
         working-directory: ./src
+        env:
+          MONGODB_URI: mongodb://localhost:27017
         run: npm run test-integration -- --coverage
 
       - name: Upload integration test coverage
