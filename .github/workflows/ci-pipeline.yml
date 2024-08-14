@@ -21,9 +21,11 @@ jobs:
           node-version: "17"
 
       - name: Install dependencies
-        run: npm install
+        working-directory: ./src
+        run: npm ci
 
       - name: Run linter
+        working-directory: ./src
         run: npm run lint
 
   unit-tests:
@@ -37,16 +39,18 @@ jobs:
           node-version: "17"
 
       - name: Install dependencies
-        run: npm install
+        working-directory: ./src
+        run: npm ci
 
-      - name: Run unit tests
+      - name: Run unit tests with coverage
+        working-directory: ./src
         run: npm run test:unit -- --coverage
 
       - name: Upload unit test coverage
         uses: actions/upload-artifact@v3
         with:
           name: unit-test-coverage
-          path: coverage/
+          path: ./src/coverage/icov-report/
 
   # integration-tests:
   #   runs-on: ubuntu-latest
@@ -59,25 +63,27 @@ jobs:
   #         node-version: "17"
 
   #     - name: Install dependencies
-  #       run: npm install
+  #       working-directory: ./src
+  #       run: npm ci
 
   #     - name: Set up MongoDB
   #       run: sudo service mongod start
 
-  #     - name: Run integration tests
+  #     - name: Run integration tests with coverage
+  #       working-directory: ./src
   #       run: npm run test:integration -- --coverage
 
   #     - name: Upload integration test coverage
   #       uses: actions/upload-artifact@v3
   #       with:
   #         name: integration-test-coverage
-  #         path: coverage/
+  #         path: ./src/coverage/icov-report
 
   #     - name: Upload integration test results
   #       uses: actions/upload-artifact@v3
   #       with:
   #         name: integration-test-results
-  #         path: junit.xml
+  #         path: ./src/junit.xml
 
   # e2e-tests:
   #   runs-on: ubuntu-latest
@@ -90,16 +96,18 @@ jobs:
   #         node-version: "17"
 
   #     - name: Install dependencies
-  #       run: npm install
+  #       working-directory: ./src
+  #       run: npm ci
 
   #     - name: Run e2e tests
+  #       working-directory: ./src
   #       run: npm run test:e2e
 
   #     - name: Upload e2e test results
   #       uses: actions/upload-artifact@v3
   #       with:
   #         name: e2e-test-results
-  #         path: playwright-report/
+  #         path: ./src/playwright-report/
   build:
     runs-on: ubuntu-latest
     steps:
@@ -111,15 +119,18 @@ jobs:
           node-version: "17"
 
       - name: Install dependencies
-        run: npm install
+        working-directory: ./src
+        run: npm ci
 
       - name: Build the application
+        working-directory: ./src
         run: npm run build
 
       - name: Package application
         run: |
           mkdir -p deploy
-          zip -r deploy/NOTE-APP-1.1.0.zip src/ .github/ img/ package.json
+          cd src
+          zip -r ../deploy/NOTE-APP-1.1.0.zip . -x ".github/*"
 
       - name: Upload deployable artifact
         uses: actions/upload-artifact@v3
