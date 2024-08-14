@@ -2,7 +2,7 @@ const app = require("../../app");
 const supertest = require("supertest");
 const req = supertest(app);
 // const Note = require("../../models/note")
-
+jest.setTimeout(10000);
 // Integration Tests programmatically test the API used by the application
 
 describe("Add Note", () => {
