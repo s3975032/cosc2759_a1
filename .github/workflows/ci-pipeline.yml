@@ -141,9 +141,7 @@ jobs:
         run: npx playwright install
 
       - name: Install Playwright dependencies
-        run: |
-          sudo apt-get update
-          sudo npx playwright install-deps
+        run: npx playwright install-deps
 
       - name: Run e2e tests
         working-directory: ./src
