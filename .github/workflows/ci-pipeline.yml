@@ -119,6 +119,8 @@ jobs:
 
   e2e-tests:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.46.0-jammy
     services:
       mongodb:
         image: mongo:latest
@@ -135,13 +137,6 @@ jobs:
       - name: Install dependencies
         working-directory: ./src
         run: npm ci
-
-      - name: Install playwright browsers
-        working-directory: ./src
-        run: npx playwright install
-
-      - name: Install system dependencies
-        run: npx playwright install-deps
 
       - name: Run e2e tests
         working-directory: ./src
