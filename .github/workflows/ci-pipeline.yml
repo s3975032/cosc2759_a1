@@ -140,6 +140,9 @@ jobs:
         working-directory: ./src
         run: npx playwright install
 
+      - name: Install Playwright dependencies
+        run: sudo npx playwright install-deps
+
       - name: Run e2e tests
         working-directory: ./src
         run: |
