@@ -119,13 +119,18 @@ jobs:
 
   e2e-tests:
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 20.x
+      - name: Use Node.js 17.x
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "17"
 
       - name: Install dependencies
         working-directory: ./src
@@ -137,9 +142,7 @@ jobs:
 
       - name: Run e2e tests
         working-directory: ./src
-        run: |
-          nohup npm start &
-          npm run test-e2e
+        run: npm run test-e2e
 
       - name: Upload e2e test results
         uses: actions/upload-artifact@v3
