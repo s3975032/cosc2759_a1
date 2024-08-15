@@ -145,7 +145,7 @@ jobs:
         run: |
           nohup npm start &
           sleep 20
-          npm run test-e2e
+          npx playwright test --project=webkit --reporter=list
 
       - name: Upload e2e test results
         uses: actions/upload-artifact@v3
