@@ -141,7 +141,7 @@ jobs:
         run: npx playwright install
 
       - name: Install system dependencies
-        run: rfbrowser init --with-deps
+        run: npx playwright install-deps
 
       - name: Run e2e tests
         working-directory: ./src
