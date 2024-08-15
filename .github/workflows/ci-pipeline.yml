@@ -15,10 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 17.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: "17"
+          node-version: "20"
 
       - name: Install dependencies
         working-directory: ./src
@@ -33,10 +33,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 17.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: "17"
+          node-version: "20"
 
       - name: Install dependencies
         working-directory: ./src
@@ -47,125 +47,118 @@ jobs:
         run: npm run test-unit -- --coverage
 
       - name: Upload unit test coverage
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
           name: unit-test-coverage
-          path: ./src/coverage/icov-report/
+          path: ./src/coverage
 
-  # integration-tests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-
-  #     - name: Use Node.js 17.x
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: "17"
-
-  #     - name: Install dependencies
-  #       working-directory: ./src
-  #       run: npm ci
-
-  #     - name: Install MongoDB
-  #       run: sudo apt install -y mongodb-org
-
-  #     - name: Start MongoDB
-  #       run: sudo service mongod start
-
-  #     - name: Run integration tests with coverage
-  #       working-directory: ./src
-  #       env:
-  #         MONGODB_URI: mongodb://localhost:27017
-  #       run: npm run test-integration -- --coverage
-
-  #     - name: Upload integration test coverage
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: integration-test-coverage
-  #         path: ./src/coverage/icov-report
-
-  #     - name: Upload integration test results
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: integration-test-results
-  #         path: ./src/junit.xml
-
-  artifact:
+  integration-tests:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+    env:
+      SERVER: mongodb://localhost:27017
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 17.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: "17"
+          node-version: "20"
 
       - name: Install dependencies
         working-directory: ./src
         run: npm ci
 
-      - name: List directory contents
-        run: ls -la
+      # - name: Install MongoDB
+      #   run: sudo apt install -y mongodb-org
 
-      - name: Archive source code
-        run: zip -r notes-app-1.1.0.zip src
+      # - name: Start MongoDB
+      #   run: sudo service mongod start
 
-      - name: Upload artifact
+      - name: Run integration tests with coverage
+        working-directory: ./src
+        run: npm run test-integration -- --coverage
+
+      - name: Upload integration test coverage
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
-          name: notes-app-1.1.0
-          path: notes-app-1.1.0.zip
+          name: integration-test-coverage
+          path: ./src/coverage
 
-  # e2e-tests:
+  # artifact:
   #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
   #   steps:
   #     - uses: actions/checkout@v3
 
-  #     - name: Use Node.js 17.x
+  #     - name: Use Node.js 20.x
   #       uses: actions/setup-node@v3
   #       with:
-  #         node-version: "17"
+  #         node-version: "20"
 
   #     - name: Install dependencies
   #       working-directory: ./src
   #       run: npm ci
 
-  #     - name: Run e2e tests
-  #       working-directory: ./src
-  #       run: npm run test-e2e
+  #     - name: List directory contents
+  #       run: ls -la
 
-  #     - name: Upload e2e test results
+  #     - name: Archive source code
+  #       run: zip -r notes-app-1.1.0.zip src
+
+  #     - name: Upload artifact
   #       uses: actions/upload-artifact@v3
   #       with:
-  #         name: e2e-test-results
-  #         path: ./src/playwright-report/
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
+  #         name: notes-app-1.1.0
+  #         path: notes-app-1.1.0.zip
 
-  #     - name: Use Node.js 17.x
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: "17"
+  e2e-tests:
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+    env:
+      SERVER: mongodb://localhost:27017
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Install dependencies
-  #       working-directory: ./src
-  #       run: npm ci
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
 
-  #     - name: Build the application
-  #       working-directory: ./src
-  #       run: npm run build
+      - name: Install dependencies
+        working-directory: ./src
+        run: npm ci
 
-  #     - name: Package application
-  #       run: |
-  #         mkdir -p deploy
-  #         cd src
-  #         zip -r ../deploy/NOTE-APP-1.1.0.zip . -x ".github/*"
+      - name: Install playwright browsers
+        working-directory: ./src
+        run: |
+          npm install @playwright/test@1.46.0
+          npx playwright install-deps
+          npx playwright install
 
-  #     - name: Upload deployable artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: deployable-application
-  #         path: deploy/NOTE-APP-1.1.0.zip
+      # - name: Install system dependencies
+      #   run: npx playwright install-deps
+
+      - name: Run e2e tests
+        working-directory: ./src
+        run: |
+          nohup npm start &
+          sleep 40
+          npm run test-e2e
+
+      - name: Upload e2e test results
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-test-results
+          path: ./src/playwright-report/
