@@ -138,11 +138,13 @@ jobs:
 
       - name: Install playwright browsers
         working-directory: ./src
-        run: npx playwright install
+        run: npx playwright install --with-deps
 
       - name: Run e2e tests
         working-directory: ./src
-        run: npm run test-e2e
+        run: |
+          nohup npm start &
+          npx playwright test --headed
 
       - name: Upload e2e test results
         uses: actions/upload-artifact@v3
