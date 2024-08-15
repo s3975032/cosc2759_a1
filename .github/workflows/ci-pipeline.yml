@@ -140,8 +140,48 @@ jobs:
         working-directory: ./src
         run: npx playwright install
 
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            fonts-dejavu \
+            libnss3 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            libxss1 \
+            libxtst6 \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libgbm1 \
+            libpango-1.0-0 \
+            libcups2 \
+            libxkbcommon0 \
+            libxshmfence1 \
+            libpci3 \
+            libdrm2 \
+            libwayland-client0 \
+            libwayland-cursor0 \
+            libwayland-egl1 \
+            libgtk-3-0 \
+            libnss3 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            libxss1 \
+            libxtst6 \
+            libatk-bridge2.0-0 \
+            libpango-1.0-0 \
+            libcups2 \
+            libxkbcommon0 \
+            libxshmfence1 \
+            libpci3 \
+            libdrm2 \
+            libwayland-client0 \
+            libwayland-cursor0 \
+            libwayland-egl1
 
       - name: Run e2e tests
         working-directory: ./src
