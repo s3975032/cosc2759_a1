@@ -138,7 +138,7 @@ jobs:
 
       - name: Install playwright browsers
         working-directory: ./src
-        run: npx playwright install --with-deps
+        run: npx playwright install
 
       - name: Run e2e tests
         working-directory: ./src
