@@ -46,11 +46,12 @@ jobs:
         working-directory: ./src
         run: npm run test-unit -- --coverage
 
-      # - name: Upload unit test coverage
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: unit-test-coverage
-      #     path: ./src/coverage/icov-report/
+      - name: Upload unit test coverage
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-test-coverage
+          path: ./src/coverage
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -83,17 +84,12 @@ jobs:
         working-directory: ./src
         run: npm run test-integration -- --coverage
 
-      # - name: Upload integration test coverage
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: integration-test-coverage
-      #     path: ./src/coverage/icov-report
-
-      # - name: Upload integration test results
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: integration-test-results
-      #     path: ./src/junit.xml
+      - name: Upload integration test coverage
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-coverage
+          path: ./src/coverage
 
   # artifact:
   #   runs-on: ubuntu-latest
@@ -161,6 +157,7 @@ jobs:
           npm run test-e2e
 
       - name: Upload e2e test results
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
           name: e2e-test-results
