@@ -6,7 +6,7 @@ test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/');
 
   // Click text=New Note
-  await page.locator('text=New Note').click();
+  await page.locator('a:has-text("New Note")').click();
   await expect(page).toHaveURL('http://localhost:3000/new');
 
   // Click [placeholder="Enter Note Title"]
@@ -26,7 +26,7 @@ test('test', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/');
 
   // Click text=Delete
-  await page.locator('text=Delete').click();
+  await page.locator('.btn.btn-danger >> nth=0').click();
   await expect(page).toHaveURL('http://localhost:3000/');
 
 });
