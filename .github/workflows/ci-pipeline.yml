@@ -145,10 +145,7 @@ jobs:
 
       - name: Run e2e tests
         working-directory: ./src
-        run: |
-          nohup npm start &
-          sleep 30
-          npx playwright test --project=webkit --reporter=list
+        run: npm run test-e2e
 
       - name: Upload e2e test results
         uses: actions/upload-artifact@v3
