@@ -26,7 +26,7 @@ test('test', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/');
 
   // Click text=Delete
-  await page.locator('.btn.btn-danger >> nth=0').click();
+  await page.locator('.btn.btn-danger >> nth=0').click({ timeout: 10000 });
   await expect(page).toHaveURL('http://localhost:3000/');
 
 });
