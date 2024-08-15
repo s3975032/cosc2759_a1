@@ -147,7 +147,7 @@ jobs:
         working-directory: ./src
         run: |
           nohup npm start &
-          sleep 30
+          sleep 40
           npm run test-e2e
 
       - name: Upload e2e test results
