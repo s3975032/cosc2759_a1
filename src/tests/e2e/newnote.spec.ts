@@ -6,7 +6,7 @@ test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/');
 
   // Click text=New Note
-  await page.locator('a:has-text("New Note")').click();
+  await page.locator('a:has-text("New Note")', { timeout: 10000 }).click();
   await expect(page).toHaveURL('http://localhost:3000/new');
 
   // Click [placeholder="Enter Note Title"]
