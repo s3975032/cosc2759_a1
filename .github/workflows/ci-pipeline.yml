@@ -140,12 +140,14 @@ jobs:
         working-directory: ./src
         run: npx playwright install
 
-      - name: Run e2e tests
-        working-directory: ./src
+      - name: Start server
         run: |
           nohup npm start &
           sleep 10
-          npm run test-e2e
+
+      - name: Run e2e tests
+        working-directory: ./src
+        run: npx playwright test --reporter=list
 
       - name: Upload e2e test results
         uses: actions/upload-artifact@v3
