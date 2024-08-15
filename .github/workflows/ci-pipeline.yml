@@ -138,13 +138,18 @@ jobs:
 
       - name: Install playwright browsers
         working-directory: ./src
-        run: npx playwright install --with-deps
+        run: npx playwright install
+
+      - name: Install Playwright dependencies
+        run: |
+          sudo apt-get update
+          sudo npx playwright install-deps
 
       - name: Run e2e tests
         working-directory: ./src
         run: |
           nohup npm start &
-          sleep 20
+          sleep 30
           npx playwright test --project=webkit --reporter=list
 
       - name: Upload e2e test results
