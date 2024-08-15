@@ -126,10 +126,13 @@ jobs:
         with:
           node-version: "18"
       - name: Install dependencies
+        working-directory: ./src
         run: npm ci
       - name: Install Playwright Browsers
+        working-directory: ./src
         run: npx playwright install --with-deps
       - name: Run Playwright tests
+        working-directory: ./src
         run: npx playwright test
       - name: Upload e2e test results
         uses: actions/upload-artifact@v4
