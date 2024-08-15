@@ -145,7 +145,7 @@ jobs:
         run: |
           nohup npm start &
           sleep 10
-          npm run test e2e
+          npm run test-e2e
 
       - name: Upload e2e test results
         uses: actions/upload-artifact@v3
